@@ -1,0 +1,229 @@
+---
+name: NourishLink AI
+colors:
+  surface: '#faf8ff'
+  surface-dim: '#d2d9f4'
+  surface-bright: '#faf8ff'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#f2f3ff'
+  surface-container: '#eaedff'
+  surface-container-high: '#e2e7ff'
+  surface-container-highest: '#dae2fd'
+  on-surface: '#131b2e'
+  on-surface-variant: '#3d4a42'
+  inverse-surface: '#283044'
+  inverse-on-surface: '#eef0ff'
+  outline: '#6d7a72'
+  outline-variant: '#bccac0'
+  surface-tint: '#006c4a'
+  primary: '#006948'
+  on-primary: '#ffffff'
+  primary-container: '#00855d'
+  on-primary-container: '#f5fff7'
+  inverse-primary: '#68dba9'
+  secondary: '#904d00'
+  on-secondary: '#ffffff'
+  secondary-container: '#fe932c'
+  on-secondary-container: '#663500'
+  tertiary: '#006194'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#007bb9'
+  on-tertiary-container: '#fdfcff'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#85f8c4'
+  primary-fixed-dim: '#68dba9'
+  on-primary-fixed: '#002114'
+  on-primary-fixed-variant: '#005137'
+  secondary-fixed: '#ffdcc3'
+  secondary-fixed-dim: '#ffb77d'
+  on-secondary-fixed: '#2f1500'
+  on-secondary-fixed-variant: '#6e3900'
+  tertiary-fixed: '#cce5ff'
+  tertiary-fixed-dim: '#93ccff'
+  on-tertiary-fixed: '#001d31'
+  on-tertiary-fixed-variant: '#004b73'
+  background: '#faf8ff'
+  on-background: '#131b2e'
+  surface-variant: '#dae2fd'
+typography:
+  display-lg:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 3.5rem
+    fontWeight: '800'
+    lineHeight: 4rem
+    letterSpacing: -0.025em
+  display-lg-mobile:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 2.25rem
+    fontWeight: '800'
+    lineHeight: 2.75rem
+    letterSpacing: -0.02em
+  headline-lg:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 2rem
+    fontWeight: '700'
+    lineHeight: 2.5rem
+    letterSpacing: -0.02em
+  headline-lg-mobile:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 1.5rem
+    fontWeight: '700'
+    lineHeight: 2rem
+    letterSpacing: -0.015em
+  headline-md:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 1.25rem
+    fontWeight: '600'
+    lineHeight: 1.75rem
+    letterSpacing: -0.01em
+  headline-sm:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 1.125rem
+    fontWeight: '600'
+    lineHeight: 1.5rem
+    letterSpacing: -0.005em
+  body-lg:
+    fontFamily: Inter
+    fontSize: 1.125rem
+    fontWeight: '400'
+    lineHeight: 1.75rem
+  body-md:
+    fontFamily: Inter
+    fontSize: 0.9375rem
+    fontWeight: '400'
+    lineHeight: 1.5rem
+  body-sm:
+    fontFamily: Inter
+    fontSize: 0.8125rem
+    fontWeight: '400'
+    lineHeight: 1.25rem
+  label-lg:
+    fontFamily: Inter
+    fontSize: 0.875rem
+    fontWeight: '600'
+    lineHeight: 1.25rem
+    letterSpacing: 0.01em
+  label-md:
+    fontFamily: Inter
+    fontSize: 0.75rem
+    fontWeight: '600'
+    lineHeight: 1rem
+    letterSpacing: 0.02em
+  label-sm:
+    fontFamily: Inter
+    fontSize: 0.6875rem
+    fontWeight: '700'
+    lineHeight: 0.875rem
+    letterSpacing: 0.04em
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  gutter: 1.5rem
+  gutter-mobile: 0.75rem
+  margin: 2rem
+  margin-mobile: 1rem
+  space-xs: 0.25rem
+  space-sm: 0.5rem
+  space-md: 1rem
+  space-lg: 1.5rem
+  space-xl: 2.5rem
+---
+
+## Brand & Style
+
+This design system embodies high-trust civic infrastructure, rapid humanitarian logistics, and predictive food rescue intelligence. The brand personality balances institutional credibility with agile grassroots intervention: authoritative, transparent, resilient, and life-affirming. 
+
+The visual style blends **Corporate Modern** with **Tactile Data Density**:
+- **Purity and Precision:** Clean, hyper-legible analytical dashboards paired with high-contrast status signifiers to eliminate ambiguity during time-critical food handoffs.
+- **Humanitarian Dignity:** Eschewing pity or distress aesthetics in favor of dynamic, proactive operational dashboards, metric-driven impact tracking, and verified food safety assurances.
+- **Operational Clarity:** High-efficiency data density, distinct telemetry badges, live dispatch tracking, and validated safety certifications (e.g., FSSAI, ISO food handling, UN SDG 2 & 12 alignments) engineered for field operators, NGO coordinators, and enterprise food donors.
+
+## Colors
+
+The palette establishes an immediate vocabulary of safety, time-critical logistics, and institutional reliability.
+
+- **Primary (`#059669` / Emerald 600):** Anchors the brand identity in vital nourishment, ecological stewardship, and validated food safety. Supporting tint `#10b981` (Emerald 500) serves as the primary hover and active state for real-time positive feedback.
+- **Secondary (`#d97706` / Amber 600):** Designates urgency, critical time-to-spoilage thresholds, active route allocations, and impending expiry alerts. The `#f59e0b` tint illuminates live status pings and dynamic countdown telemetry.
+- **Tertiary (`#0284c7` / Sky 600):** Assigned to logistics routing, cold-chain monitoring, GPS telematics, and UN SDG impact indicators.
+- **Neutral (`#0f172a` / Slate 900):** Provides maximum contrast, structural grounding, and rigorous legibility for complex tabular interfaces and geospatial overviews.
+- **Semantic Mappings:**
+  - **Surface Canvas:** `#f8fafc` (Slate 50) creates an unpolluted, medical-grade clean backdrop.
+  - **Surface Elevated:** `#ffffff` provides crisp differentiation for cards, panels, and modal layers.
+  - **Text Primary:** `#0f172a` (Slate 900) guarantees WCAG AAA compliance across critical telemetry.
+  - **Text Secondary / Muted:** `#475569` (Slate 600) and `#64748b` (Slate 500) for structural metadata.
+  - **Border / Hairlines:** `#e2e8f0` (Slate 200) for calm, non-intrusive container boundaries.
+
+## Typography
+
+The typographic hierarchy pairs **Plus Jakarta Sans** for prominent displays, hero metrics, and section titles with **Inter** for data tables, form fields, and operational reading surfaces.
+
+- **Plus Jakarta Sans** provides a warm, modern, and humanized presence at display and headline scales, breaking the clinical coldness of municipal logistics.
+- **Inter** ensures supreme micro-legibility at 11px to 15px, rendering live metric tickers, route directions, expiry timestamps, and nutrition safety manifests with mechanical accuracy.
+- **Tabular Numerics:** All numerical counters, GPS coordinates, and countdown timers must enforce `font-feature-settings: 'tnum' on, 'cv05' on` to prevent layout shift during live sensor updates.
+
+## Layout & Spacing
+
+The layout is constructed upon an 8pt base grid with an underlying 12-column fluid grid system across desktop viewports, transitioning to an 8-column layout on tablets and a 4-column layout on mobile viewports.
+
+- **Desktop (1280px+):** 12 columns, 24px (`1.5rem`) gutters, and dynamic outer margins up to 1440px max content width. Map overlays and dispatch telemetry occupy split-screen multi-pane views (60/40 map-to-feed allocation).
+- **Tablet (768px - 1279px):** 8 columns, 16px gutters, 24px margins. Cards reflow into 2-column matrices; secondary analytics fold into collapsible sliding sheets.
+- **Mobile (320px - 767px):** 4 columns, 12px (`0.75rem`) gutters, 16px (`1rem`) outer margins. Critical dispatch actions, time-sensitive acceptance CTAs, and verification QR scanners prioritize thumb-zone vertical stacking.
+- **Component Padding Discipline:** Micro-badges use `space-xs` x `space-sm`. Action items and telemetry cards use `space-md` internally, reserving `space-lg` and `space-xl` for sectional transitions and visual breathing room.
+
+## Elevation & Depth
+
+Visual hierarchy uses **tonal layer stacking** combined with **subtle tinted ambient shadows**, creating an authoritative, tactile surface model without distracting decorative skeuomorphism.
+
+- **Level 0 (Base Canvas):** `#f8fafc`. Flush backdrop for main dashboards and geographic viewports.
+- **Level 1 (Card & Content Containers):** `#ffffff` background with a crisp border (`1px solid #e2e8f0`) and subtle ambient shadow: `0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05)`.
+- **Level 2 (Interactive Floating Panes / Feed Cards):** `#ffffff` with elevated ambient occlusion: `0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05)`.
+- **Level 3 (Modals, Verified Seal Overlays, Live Dispatch Drawers):** `0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05)`, edged with a high-trust `#cbd5e1` boundary.
+- **Urgency Glows:** Amber and emerald alerts project a zero-distance diffused aura (`0 0 16px -2px rgba(245, 158, 11, 0.25)` or `0 0 16px -2px rgba(5, 150, 105, 0.2)`) to guide operator focus toward expiring surpluses.
+
+## Shapes
+
+The design system employs **Roundedness Level 2 (Rounded)**:
+- Standard UI elements (inputs, buttons, metric badges) feature `0.5rem` (8px) corner radii.
+- Surface cards and containment modules utilize `rounded-lg` (`1rem` / 16px) for an approachable, structured framing.
+- Elevated dialogue sheets, large telemetry modules, and inspection modals utilize `rounded-xl` (`1.5rem` / 24px).
+- **Exceptions:** Live tracking chips, certification pills, and counter status badges utilize complete pill radii (`9999px`) to maintain universal visual recognition as dynamic status indicators.
+
+## Components
+
+### Buttons
+- **Primary Action (Rescue Dispatch / Claim):** Solid Emerald (`#059669`) background, `#ffffff` text, font `label-lg`, 8px border radius, with a subtle inner top highlight (`inset 0 1px 0 rgba(255, 255, 255, 0.2)`). Hover state: `#10b981`.
+- **Urgent Action (Time Critical Re-route):** Solid Amber (`#d97706`), `#ffffff` text. Hover state: `#f59e0b`.
+- **Secondary / Ghost:** Transparent background, `1px solid #e2e8f0`, text `#0f172a`. Hover state: `#f1f5f9` with border `#cbd5e1`.
+- **Touch Target:** Minimum height of 44px on mobile viewports for all operational interaction targets.
+
+### Status Chips & Telemetry Badges
+- **Live Surpluses:** Pill-shaped, `#ecfdf5` background, `#047857` text, with an embedded 6px pulsing emerald status dot.
+- **Urgent Expiry Countdown:** `#fffbeb` background, `#b45309` text, accompanied by monospaced tabular duration (e.g., `01:42:15 REMAINING`).
+- **Cold-Chain / Logistics:** `#f0f9ff` background, `#0369a1` text, with icon indicator.
+
+### Input Fields & Controls
+- **Inputs & Selects:** Height 42px, background `#ffffff`, border `1px solid #cbd5e1`, font `body-md`. Focus rings use a dual-layer transition: `box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2), border-color: #059669`.
+- **Checkboxes & Radios:** 18px dimensions, 4px border radius for checkboxes and 50% for radios. Active state filled with `#059669` and sharp white SVG tick mark.
+
+### Data Cards & Surplus Items
+- Clean white surface, 16px corner radius, hairline `#e2e8f0` border.
+- Divided into three structured zones:
+  1. **Header Zone:** Donor verification badge, distance matrix, and time-to-decay chip.
+  2. **Content Zone:** Surplus inventory list with weights (kg), temperature requirements, and prepared timestamps.
+  3. **Footer Zone:** One-touch verification signature, chain-of-custody CTA, and FSSAI safety compliance check.
+
+### Humanitarian Impact Counters
+- Monospaced numeric ticker utilizing `display-lg`, styled in `#059669` or `#0f172a`.
+- Accompanied by micro-labels in uppercase `label-sm` (`#64748b`) depicting metrics: `MEALS REDISTRIBUTED`, `CO2e MITIGATED (KG)`, and `SURPLUS CONVERTED (%)`.
+
+### Trust & Certification Modules
+- Dedicated institutional lockups showcasing verified partner seals (FSSAI Safe Food Handlers, UN Sustainable Development Goals 2 & 12).
+- Presented with slate monochrome icons that transition to full semantic color upon active cryptographic verification.

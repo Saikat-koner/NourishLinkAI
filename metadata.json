@@ -1,0 +1,6 @@
+{
+  "name": "NourishLink AI",
+  "description": "Hyperlocal Food Rescue & Dignity Logistics with autonomous CVRPTW dispatch, edge vision verification, real-time microbial decay telemetry, and community headcount census.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
