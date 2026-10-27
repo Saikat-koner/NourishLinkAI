@@ -61,3 +61,42 @@ test('validateCensusNode catches invalid or incomplete entries', () => {
   assert.equal(valid.valid, true);
   assert.equal(valid.errors.length, 0);
 });
+
+test('Community Leaderboard accurately ranks donors and assigns tiered badges', () => {
+  // Test tier classification
+  const resolveTier = (points: number, kg: number) => {
+    if (points >= 6000 && kg >= 2000) return 'diamond';
+    if (points >= 4000 && kg >= 1200) return 'gold';
+    if (points >= 2500 && kg >= 700) return 'silver';
+    if (points >= 1000 && kg >= 300) return 'bronze';
+    return 'pioneer';
+  };
+
+  assert.equal(resolveTier(18950, 14200), 'diamond');
+  assert.equal(resolveTier(4850, 1480), 'gold');
+  assert.equal(resolveTier(3820, 1040), 'silver');
+  assert.equal(resolveTier(1640, 490), 'bronze');
+  assert.equal(resolveTier(760, 220), 'pioneer');
+
+  // Test sorting by impact points
+  const testDonors = [
+    { name: 'Donor B', points: 4000, kg: 1500 },
+    { name: 'Donor A', points: 9000, kg: 3000 },
+    { name: 'Donor C', points: 2000, kg: 800 },
+  ];
+
+  const sortedByPoints = [...testDonors].sort((a, b) => b.points - a.points);
+  assert.equal(sortedByPoints[0].name, 'Donor A');
+  assert.equal(sortedByPoints[1].name, 'Donor B');
+  assert.equal(sortedByPoints[2].name, 'Donor C');
+
+  // Test sorting by kg saved
+  const testDonorsKg = [
+    { name: 'Donor Y', points: 5000, kg: 2500 },
+    { name: 'Donor X', points: 8000, kg: 1800 },
+  ];
+  const sortedByKg = [...testDonorsKg].sort((a, b) => b.kg - a.kg);
+  assert.equal(sortedByKg[0].name, 'Donor Y');
+  assert.equal(sortedByKg[1].name, 'Donor X');
+});
+

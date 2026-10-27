@@ -42,6 +42,9 @@ export default function App() {
       } else if (hash === 'rewards' || hash === 'impact-rewards') {
         setActivePortal('donor-receiver');
         setDonorReceiverSubTab('rewards');
+      } else if (hash === 'leaderboard' || hash === 'ranks') {
+        setActivePortal('donor-receiver');
+        setDonorReceiverSubTab('leaderboard');
       } else if (hash === 'profile') {
         setProfileModalOpen(true);
       } else if (hash === 'admin' || hash === 'live-hub') {
@@ -203,6 +206,13 @@ export default function App() {
       <DonorProfileModal
         isOpen={profileModalOpen}
         onClose={() => setProfileModalOpen(false)}
+        onOpenLeaderboard={() => {
+          setProfileModalOpen(false);
+          setActivePortal('donor-receiver');
+          setDonorReceiverSubTab('leaderboard');
+          window.location.hash = 'leaderboard';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
       />
 
       {/* Global Feedback Toast */}

@@ -40,26 +40,31 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'receive', label: 'Receiver Hub & Inbound', icon: 'inventory_2' },
     { id: 'request-aid', label: 'Request Food Aid', icon: 'support_agent' },
     { id: 'rewards', label: 'Gamified Impact & Rewards', icon: 'military_tech' },
+    { id: 'leaderboard', label: 'Community Leaderboard', icon: 'leaderboard' },
   ];
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-[#faf8ff]/95 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.05)] border-b border-[#bccac0]/30">
-      {/* Top Emergency Ribbon */}
-      <div className="bg-[#904d00] text-white px-4 md:px-6 py-1">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-[11px] font-semibold tracking-wide">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-sm">emergency_home</span>
-            <span>Toll-free 24/7 Food Rescue Hotline: 1800-NOURISH</span>
-            <span className="opacity-60">|</span>
-            <span className="hidden sm:inline opacity-90">SLA: &lt;14 mins Metro Thermal Handoff</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5 text-[#ffdcc3]">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Punjab Corridor Grid Active
-            </span>
-            <span className="hidden md:inline text-[#ffdcc3]/90">FSSAI Sec. 31-C Good Samaritan Shield</span>
-          </div>
+      {/* Top Moving Emergency Ribbon: Only Toll-Free Hotline & FSSAI Shield */}
+      <div className="bg-[#904d00] text-white py-1 overflow-hidden whitespace-nowrap border-b border-[#ffdcc3]/20 select-none">
+        <div className="animate-marquee flex items-center gap-8 font-semibold text-[11px] tracking-wide">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <div key={idx} className="flex items-center gap-8 shrink-0">
+              <span className="inline-flex items-center gap-1.5 text-white">
+                <span className="material-symbols-outlined text-sm text-[#ffdcc3] animate-pulse">call</span>
+                <span>Toll-free 24/7 Food Rescue Hotline: <strong>1800-NOURISH</strong> (1800-668-7474)</span>
+              </span>
+
+              <span className="text-[#ffdcc3]/40">•</span>
+
+              <span className="inline-flex items-center gap-1.5 text-[#ffdcc3]">
+                <span className="material-symbols-outlined text-sm text-[#85f8c4]">verified_user</span>
+                <span>FSSAI Sec. 31-C Good Samaritan Shield (100% Statutory Legal Protection)</span>
+              </span>
+
+              <span className="text-[#ffdcc3]/40">•</span>
+            </div>
+          ))}
         </div>
       </div>
 

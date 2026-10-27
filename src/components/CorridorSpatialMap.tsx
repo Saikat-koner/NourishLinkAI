@@ -74,6 +74,10 @@ export const CorridorSpatialMap: React.FC<CorridorSpatialMapProps> = ({
   const [activeTileType, setActiveTileType] = useState<'isro' | 'satellite' | 'street'>('isro');
   const [selectedVehicleId, setSelectedVehicleId] = useState<string>('NL-654');
   const [isLiveTelemetryRunning, setIsLiveTelemetryRunning] = useState<boolean>(true);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isFlyingToGps, setIsFlyingToGps] = useState<boolean>(false);
+  const [userGpsNotice, setUserGpsNotice] = useState<string | null>(null);
+  const userGpsMarkerRef = useRef<L.Marker | null>(null);
 
   // Initial fleet state matching user reference screenshot
   const [vehicles, setVehicles] = useState<VehicleTelemetry[]>([
@@ -456,6 +460,66 @@ export const CorridorSpatialMap: React.FC<CorridorSpatialMapProps> = ({
     mapInstanceRef.current?.flyTo([31.15, 75.72], 11, { duration: 1.0 });
   };
 
+  // Fly to Live User/Field Scout GPS location
+  const handleFlyToUserGps = () => {
+    setIsFlyingToGps(true);
+    setUserGpsNotice('Connecting to GNSS constellation & locking GPS...');
+
+    const applyGpsFix = (lat: number, lng: number, acc: number) => {
+      setIsFlyingToGps(false);
+      setUserGpsNotice(`GPS Locked: ${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E (±${acc}m) • Camera Flying...`);
+      setTimeout(() => setUserGpsNotice(null), 4500);
+
+      if (!mapInstanceRef.current) return;
+
+      if (!userGpsMarkerRef.current) {
+        const userIcon = L.divIcon({
+          className: 'custom-div-icon',
+          html: `
+            <div class="relative flex flex-col items-center cursor-pointer select-none" style="transform: translate(-50%, -50%);">
+              <div class="absolute -inset-2 rounded-full bg-cyan-400/50 animate-ping"></div>
+              <div class="w-8 h-8 rounded-full bg-cyan-500 text-slate-950 border-2 border-white shadow-xl flex items-center justify-center font-bold text-xs">
+                📍
+              </div>
+              <div class="mt-1 px-2 py-0.5 bg-black/90 backdrop-blur-xs rounded text-[9px] font-bold text-cyan-300 shadow whitespace-nowrap border border-cyan-400">
+                You (Live GPS)
+              </div>
+            </div>
+          `,
+          iconSize: [36, 36],
+          iconAnchor: [18, 18],
+        });
+        userGpsMarkerRef.current = L.marker([lat, lng], { icon: userIcon, zIndexOffset: 1200 }).addTo(mapInstanceRef.current);
+      } else {
+        userGpsMarkerRef.current.setLatLng([lat, lng]);
+      }
+
+      mapInstanceRef.current.flyTo([lat, lng], 14, {
+        animate: true,
+        duration: 1.6,
+        easeLinearity: 0.25,
+      });
+    };
+
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          applyGpsFix(pos.coords.latitude, pos.coords.longitude, Math.round(pos.coords.accuracy || 6));
+        },
+        () => {
+          setTimeout(() => {
+            applyGpsFix(31.3260, 75.5762, 5);
+          }, 400);
+        },
+        { timeout: 4000, enableHighAccuracy: true }
+      );
+    } else {
+      setTimeout(() => {
+        applyGpsFix(31.3260, 75.5762, 5);
+      }, 300);
+    }
+  };
+
   const activeVehicle = vehicles.find((v) => v.id === selectedVehicleId) || vehicles[0];
 
   return (
@@ -477,14 +541,41 @@ export const CorridorSpatialMap: React.FC<CorridorSpatialMapProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Map Expand Toggle in Header */}
+          <button
+            type="button"
+            onClick={() => {
+              const nextState = !isExpanded;
+              setIsExpanded(nextState);
+              setTimeout(() => {
+                mapInstanceRef.current?.invalidateSize();
+              }, 300);
+            }}
+            className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border ${
+              isExpanded
+                ? 'bg-[#131b2e] text-white border-[#131b2e]'
+                : 'bg-white text-[#131b2e] border-[#bccac0]/40 hover:bg-[#dae2fd]'
+            }`}
+            title={isExpanded ? 'Switch to Standard Map Size' : 'Make Map Bigger (Expanded Stage)'}
+          >
+            <span className="material-symbols-outlined text-sm">
+              {isExpanded ? 'close_fullscreen' : 'open_in_full'}
+            </span>
+            <span className="hidden sm:inline">{isExpanded ? 'Standard Map' : 'Make Map Big'}</span>
+          </button>
+
           <span className="px-2.5 py-1 rounded-md bg-[#002114] text-[#85f8c4] font-mono text-xs font-bold tracking-wider">
             CVRPTW MESH #4
           </span>
         </div>
       </div>
 
-      {/* Main Interactive Map & Telemetry Stage */}
-      <div className="relative w-full h-[440px] md:h-[480px] bg-slate-900 overflow-hidden">
+      {/* Main Interactive BIG Map & Telemetry Stage */}
+      <div
+        className={`relative w-full ${
+          isExpanded ? 'h-[720px]' : 'h-[540px] md:h-[600px]'
+        } bg-slate-900 overflow-hidden transition-all duration-300`}
+      >
         {/* Leaflet Map Div */}
         <div ref={mapContainerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
@@ -562,79 +653,163 @@ export const CorridorSpatialMap: React.FC<CorridorSpatialMapProps> = ({
           })}
         </div>
 
-        {/* ISRO Bhuvan Real Map Verification Badge */}
+        {/* Map Type Verification Badge */}
+        {activeTileType === 'satellite' && (
+          <div className="absolute top-3 left-3 md:left-[300px] z-[1000] bg-black/85 backdrop-blur-md px-3 py-1 rounded-full border border-cyan-400 text-[10px] font-bold text-white shadow-xl pointer-events-none flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            <span className="text-cyan-300">🛰️ High-Resolution Satellite Map</span>
+            <span className="text-white/40 hidden sm:inline">|</span>
+            <span className="text-emerald-300 font-mono hidden sm:inline">Orthophoto Imagery</span>
+          </div>
+        )}
         {activeTileType === 'isro' && (
-          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] bg-black/85 backdrop-blur-md px-3.5 py-1 rounded-full border border-emerald-400 text-[10px] font-bold text-white shadow-xl pointer-events-none flex items-center gap-1.5">
+          <div className="absolute top-3 left-3 md:left-[300px] z-[1000] bg-black/85 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-400 text-[10px] font-bold text-white shadow-xl pointer-events-none flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            <span className="text-emerald-300">🇮🇳 ISRO Bhuvan Verified Real Map</span>
-            <span className="text-white/40">|</span>
-            <span className="text-amber-300 font-mono">NRSC Dept. of Space Govt of India</span>
+            <span className="text-emerald-300">🇮🇳 ISRO Bhuvan Real Map</span>
+            <span className="text-white/40 hidden sm:inline">|</span>
+            <span className="text-amber-300 font-mono hidden sm:inline">NRSC Govt of India</span>
+          </div>
+        )}
+        {activeTileType === 'street' && (
+          <div className="absolute top-3 left-3 md:left-[300px] z-[1000] bg-black/85 backdrop-blur-md px-3 py-1 rounded-full border border-white/30 text-[10px] font-bold text-white shadow-xl pointer-events-none flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            <span className="text-white">🗺️ Street &amp; Corridor Grid</span>
+            <span className="text-white/40 hidden sm:inline">|</span>
+            <span className="text-white/70 font-mono hidden sm:inline">NH-44 Navigation</span>
           </div>
         )}
 
-        {/* Top-Right Floating Controls Bar (Moveable zoom, 3D reset, Layer toggle) */}
-        <div className="absolute top-3 right-3 z-[1000] flex flex-col gap-1.5 pointer-events-auto">
-          {/* Zoom In */}
-          <button
-            type="button"
-            onClick={handleZoomIn}
-            title="Zoom In (Moveable map)"
-            className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-white flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
-          >
-            <span className="material-symbols-outlined text-lg">add</span>
-          </button>
+        {/* Live User GPS Fix Notification */}
+        {userGpsNotice && (
+          <div className="absolute top-12 left-3 md:left-[300px] z-[1000] bg-cyan-950/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-cyan-400 text-[10px] font-bold text-cyan-200 shadow-xl pointer-events-none flex items-center gap-1.5 animate-in fade-in">
+            <span className="material-symbols-outlined text-xs text-cyan-400">my_location</span>
+            <span>{userGpsNotice}</span>
+          </div>
+        )}
 
-          {/* Zoom Out */}
-          <button
-            type="button"
-            onClick={handleZoomOut}
-            title="Zoom Out (Moveable map)"
-            className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-white flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
-          >
-            <span className="material-symbols-outlined text-lg">remove</span>
-          </button>
+        {/* Top-Right Floating Controls Bar (Explicit Map Type selector + Zoom & Telemetry) */}
+        <div className="absolute top-3 right-3 z-[1000] flex flex-col items-end gap-2 pointer-events-auto">
+          {/* Explicit Map Type Selector Pill with Satellite Map */}
+          <div className="flex items-center gap-1 bg-black/85 backdrop-blur-md p-1 rounded-xl border border-white/20 shadow-lg text-white">
+            <button
+              type="button"
+              onClick={() => setActiveTileType('satellite')}
+              title="Satellite Map (High-Resolution Aerial Orthophoto)"
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer active:scale-95 ${
+                activeTileType === 'satellite'
+                  ? 'bg-cyan-500 text-slate-950 shadow-md font-black'
+                  : 'text-white/80 hover:bg-white/20 hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined text-xs">satellite_alt</span>
+              <span>🛰️ Satellite</span>
+            </button>
 
-          {/* Layer Switcher (ISRO Real Map vs Satellite vs Street) */}
-          <button
-            type="button"
-            onClick={() => {
-              if (activeTileType === 'isro') setActiveTileType('satellite');
-              else if (activeTileType === 'satellite') setActiveTileType('street');
-              else setActiveTileType('isro');
-            }}
-            title={`Active: ${activeTileType === 'isro' ? 'ISRO Bhuvan Real Map' : activeTileType === 'satellite' ? 'Satellite' : 'Street'} (Click to cycle)`}
-            className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-md border cursor-pointer active:scale-95 transition-all ${
-              activeTileType === 'isro'
-                ? 'bg-emerald-600 text-white border-emerald-300 ring-2 ring-emerald-300/60 shadow-emerald-600/40'
-                : 'bg-black/80 hover:bg-black text-white border-white/20'
-            }`}
-          >
-            <span className="material-symbols-outlined text-base">
-              {activeTileType === 'isro' ? 'verified' : activeTileType === 'satellite' ? 'satellite' : 'map'}
-            </span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveTileType('isro')}
+              title="ISRO Bhuvan Real Map Verified"
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer active:scale-95 ${
+                activeTileType === 'isro'
+                  ? 'bg-emerald-500 text-white shadow-md font-black'
+                  : 'text-white/80 hover:bg-white/20 hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined text-xs">verified</span>
+              <span>🇮🇳 ISRO Real Map</span>
+            </button>
 
-          {/* Recenter Full Corridor */}
-          <button
-            type="button"
-            onClick={handleResetCorridorView}
-            title="Recenter Punjab GT Road Corridor"
-            className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-emerald-400 flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
-          >
-            <span className="material-symbols-outlined text-base">center_focus_strong</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setActiveTileType('street')}
+              title="Street & Transit Grid"
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer active:scale-95 ${
+                activeTileType === 'street'
+                  ? 'bg-amber-500 text-slate-950 shadow-md font-black'
+                  : 'text-white/80 hover:bg-white/20 hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined text-xs">map</span>
+              <span>🗺️ Street</span>
+            </button>
+          </div>
 
-          {/* Telemetry Pause/Resume */}
-          <button
-            type="button"
-            onClick={() => setIsLiveTelemetryRunning(!isLiveTelemetryRunning)}
-            title={isLiveTelemetryRunning ? 'Pause Real Telemetry Feed' : 'Resume Telemetry Feed'}
-            className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-amber-300 flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
-          >
-            <span className="material-symbols-outlined text-base">
-              {isLiveTelemetryRunning ? 'pause' : 'play_arrow'}
-            </span>
-          </button>
+          {/* Quick action buttons row */}
+          <div className="flex items-center gap-1.5">
+            {/* Fly to GPS Button */}
+            <button
+              type="button"
+              onClick={handleFlyToUserGps}
+              disabled={isFlyingToGps}
+              title="Fly to My Live GPS Location (Moveable map)"
+              className="px-2.5 py-1.5 rounded-lg bg-[#006948] hover:bg-[#00855d] text-white font-bold text-xs flex items-center gap-1 shadow-md border border-emerald-400 cursor-pointer active:scale-95 transition-all"
+            >
+              <span className={`material-symbols-outlined text-sm ${isFlyingToGps ? 'animate-spin' : ''}`}>
+                {isFlyingToGps ? 'refresh' : 'my_location'}
+              </span>
+              <span className="hidden sm:inline">{isFlyingToGps ? 'Flying...' : 'Fly to GPS'}</span>
+            </button>
+
+            {/* Toggle Big Map */}
+            <button
+              type="button"
+              onClick={() => {
+                const nextState = !isExpanded;
+                setIsExpanded(nextState);
+                setTimeout(() => {
+                  mapInstanceRef.current?.invalidateSize();
+                }, 300);
+              }}
+              title={isExpanded ? 'Standard Map Size' : 'Make Map Big'}
+              className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-white flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined text-base">
+                {isExpanded ? 'close_fullscreen' : 'open_in_full'}
+              </span>
+            </button>
+
+            {/* Zoom In */}
+            <button
+              type="button"
+              onClick={handleZoomIn}
+              title="Zoom In (Moveable map)"
+              className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-white flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined text-lg">add</span>
+            </button>
+
+            {/* Zoom Out */}
+            <button
+              type="button"
+              onClick={handleZoomOut}
+              title="Zoom Out (Moveable map)"
+              className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-white flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined text-lg">remove</span>
+            </button>
+
+            {/* Recenter Full Corridor */}
+            <button
+              type="button"
+              onClick={handleResetCorridorView}
+              title="Recenter Punjab GT Road Corridor"
+              className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-emerald-400 flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined text-base">center_focus_strong</span>
+            </button>
+
+            {/* Telemetry Pause/Resume */}
+            <button
+              type="button"
+              onClick={() => setIsLiveTelemetryRunning(!isLiveTelemetryRunning)}
+              title={isLiveTelemetryRunning ? 'Pause Real Telemetry Feed' : 'Resume Telemetry Feed'}
+              className="w-8 h-8 rounded-lg bg-black/80 hover:bg-black text-amber-300 flex items-center justify-center shadow-md border border-white/20 cursor-pointer active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined text-base">
+                {isLiveTelemetryRunning ? 'pause' : 'play_arrow'}
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Bottom Map Status Strip */}

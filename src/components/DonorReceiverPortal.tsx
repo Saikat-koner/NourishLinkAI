@@ -4,6 +4,7 @@ import { LocationSelector } from './LocationSelector.tsx';
 import { calculateDecayWindow, calculateEmissionsDiverted } from '../utils/rescueMath.ts';
 import { DEFAULT_DONOR_PROFILE } from './DonorProfileModal.tsx';
 import { DonationHistoryTimeline, INITIAL_RESCUE_OPERATIONS } from './DonationHistoryTimeline.tsx';
+import { CommunityLeaderboard } from './CommunityLeaderboard.tsx';
 
 interface DonorReceiverPortalProps {
   initialSubTab?: DonorReceiverSubTab;
@@ -300,6 +301,18 @@ export const DonorReceiverPortal: React.FC<DonorReceiverPortalProps> = ({
             >
               <span className="material-symbols-outlined text-base">military_tech</span>
               <span>4. Gamified Impact &amp; Rewards</span>
+            </button>
+
+            <button
+              onClick={() => setActiveSubTab('leaderboard')}
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeSubTab === 'leaderboard'
+                  ? 'bg-[#006948] text-white shadow-sm'
+                  : 'text-[#3d4a42] hover:bg-white hover:text-[#131b2e]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-base">leaderboard</span>
+              <span>5. Community Leaderboard</span>
             </button>
           </div>
         </div>
@@ -1106,11 +1119,43 @@ export const DonorReceiverPortal: React.FC<DonorReceiverPortalProps> = ({
               </div>
             </div>
 
+            {/* Direct Leaderboard Shortcut Banner */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-[#006948] to-[#131b2e] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
+              <div className="flex items-center gap-3">
+                <span className="p-2.5 rounded-xl bg-amber-400 text-amber-950 material-symbols-outlined text-2xl font-bold">
+                  emoji_events
+                </span>
+                <div>
+                  <h4 className="font-headline font-bold text-sm">
+                    Punjab Civic Donor Leaderboard &amp; Tier Rankings
+                  </h4>
+                  <p className="text-xs text-emerald-100">
+                    Your kitchen is currently ranked #4 in the state with 4,850 impact points and 1,480 kg saved!
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveSubTab('leaderboard')}
+                className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-amber-950 text-xs font-bold font-headline shrink-0 flex items-center gap-1 transition-all cursor-pointer shadow-sm active:scale-95"
+              >
+                <span>View Full Leaderboard</span>
+                <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
+
             {/* Donation History with Points & Savings Log */}
             <div className="bg-white p-5 rounded-2xl border border-[#bccac0]/30 shadow-sm space-y-3">
               <DonationHistoryTimeline operations={INITIAL_RESCUE_OPERATIONS} />
             </div>
           </div>
+        )}
+
+        {/* SUB-TAB 5: COMMUNITY LEADERBOARD */}
+        {activeSubTab === 'leaderboard' && (
+          <CommunityLeaderboard
+            onOpenDonate={() => setActiveSubTab('donate')}
+          />
         )}
       </div>
 

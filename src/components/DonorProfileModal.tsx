@@ -157,11 +157,151 @@ const BADGES = [
   },
 ];
 
+export interface TierCriteriaDetail {
+  id: 'bronze' | 'silver' | 'gold' | 'diamond';
+  tierLevel: number;
+  name: string;
+  badgeLabel: string;
+  icon: string;
+  gradient: string;
+  borderClass: string;
+  badgeBg: string;
+  badgeText: string;
+  minPoints: number;
+  maxPoints: number | string;
+  minKg: number;
+  minMeals: number;
+  minStreak: number;
+  haccpRate: number;
+  targetWindowMins: number;
+  status: 'achieved' | 'current' | 'locked';
+  statusText: string;
+  statusColor: string;
+  description: string;
+  unlockedPerks: string[];
+}
+
+export const TIER_SYSTEM_CRITERIA: TierCriteriaDetail[] = [
+  {
+    id: 'bronze',
+    tierLevel: 2,
+    name: 'Bronze Guardian',
+    badgeLabel: '🥉 Bronze Guardian',
+    icon: 'shield',
+    gradient: 'from-amber-700 via-amber-800 to-amber-900',
+    borderClass: 'border-amber-700/60',
+    badgeBg: 'bg-amber-100 text-amber-900 border border-amber-300',
+    badgeText: 'text-amber-900',
+    minPoints: 1000,
+    maxPoints: 2499,
+    minKg: 300,
+    minMeals: 900,
+    minStreak: 5,
+    haccpRate: 97.0,
+    targetWindowMins: 30,
+    status: 'achieved',
+    statusText: 'Achieved & Unlocked ✓',
+    statusColor: 'bg-emerald-100 text-[#006948] border-emerald-300',
+    description: 'Entry civic guardian status for consistent commercial kitchens preventing localized food waste.',
+    unlockedPerks: [
+      'Civic Kitchen Guardian Badge on public profile',
+      'Automatic IoT thermal sensor pairing',
+      'Standard dispatch SLA (<30 mins dispatch)',
+      'Quarterly District Food Supplies digital citation',
+    ],
+  },
+  {
+    id: 'silver',
+    tierLevel: 3,
+    name: 'Silver Samaritan',
+    badgeLabel: '🥈 Silver Samaritan',
+    icon: 'workspace_premium',
+    gradient: 'from-slate-400 via-slate-200 to-slate-500 text-slate-900',
+    borderClass: 'border-slate-300',
+    badgeBg: 'bg-slate-200 text-slate-800 border border-slate-300',
+    badgeText: 'text-slate-800',
+    minPoints: 2500,
+    maxPoints: 3999,
+    minKg: 700,
+    minMeals: 2100,
+    minStreak: 10,
+    haccpRate: 98.5,
+    targetWindowMins: 20,
+    status: 'achieved',
+    statusText: 'Achieved & Unlocked ✓',
+    statusColor: 'bg-emerald-100 text-[#006948] border-emerald-300',
+    description: 'Established civic benefactor delivering continuous high-volume surplus to corridor night shelters.',
+    unlockedPerks: [
+      'Verified Safe Kitchen Citation under FSSAI Sec 31(C)',
+      'Automated 80G Digital Tax Exemption Certificates',
+      'Corridor Honor Roll listing on Punjab state dashboard',
+      'Priority routing for chilled & dairy trays',
+    ],
+  },
+  {
+    id: 'gold',
+    tierLevel: 4,
+    name: 'Gold Sovereign Annadata',
+    badgeLabel: '🥇 Gold Sovereign Annadata',
+    icon: 'military_tech',
+    gradient: 'from-amber-400 via-yellow-400 to-amber-500 text-slate-950',
+    borderClass: 'border-amber-400 ring-2 ring-amber-400/40',
+    badgeBg: 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-xs',
+    badgeText: 'text-amber-950 font-bold',
+    minPoints: 4000,
+    maxPoints: 5999,
+    minKg: 1200,
+    minMeals: 3600,
+    minStreak: 14,
+    haccpRate: 99.0,
+    targetWindowMins: 14,
+    status: 'current',
+    statusText: '★ Current Active Tier (Level 4)',
+    statusColor: 'bg-amber-400 text-amber-950 border-amber-500 font-black',
+    description: 'Premier regional donor with verified zero-spill operations and rapid thermal handover capability.',
+    unlockedPerks: [
+      'FSSAI Safe Harbor Gold Shield with statutory indemnity',
+      'Guaranteed <14 mins Emergency EV Van Dispatch SLA',
+      'Monthly Commendation signed by District Civil Supplies',
+      'Zero-Spill Gold Corridors Badge & High-Priority Pickup Slot',
+    ],
+  },
+  {
+    id: 'diamond',
+    tierLevel: 5,
+    name: 'Diamond Sovereign Annadata',
+    badgeLabel: '💎 Diamond Sovereign Annadata',
+    icon: 'diamond',
+    gradient: 'from-cyan-400 via-blue-500 to-indigo-600 text-white',
+    borderClass: 'border-cyan-400/70',
+    badgeBg: 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white',
+    badgeText: 'text-cyan-900',
+    minPoints: 6000,
+    maxPoints: 'Unlimited',
+    minKg: 2000,
+    minMeals: 6000,
+    minStreak: 25,
+    haccpRate: 99.8,
+    targetWindowMins: 10,
+    status: 'locked',
+    statusText: '🔒 Next Milestone • 1,150 Pts to Unlock',
+    statusColor: 'bg-cyan-100 text-cyan-900 border-cyan-300 font-bold',
+    description: 'Sovereign institutional patron powering zero-waste corridors with full MCA CSR accreditation.',
+    unlockedPerks: [
+      'Ministry of Corporate Affairs (MCA) CSR Full Accreditation',
+      'Sovereign Patron Citation signed by Punjab Chief Secretary',
+      '100% Tax Immunity & Autonomous Audit Deductions',
+      'Dedicated Zero-Emission EV Fleet reservation link',
+    ],
+  },
+];
+
 interface DonorProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   profileData?: DonorProfileData;
   onUpdateRole?: (role: DonorProfileData['role']) => void;
+  onOpenLeaderboard?: () => void;
 }
 
 export const DonorProfileModal: React.FC<DonorProfileModalProps> = ({
@@ -169,8 +309,10 @@ export const DonorProfileModal: React.FC<DonorProfileModalProps> = ({
   onClose,
   profileData = DEFAULT_DONOR_PROFILE,
   onUpdateRole,
+  onOpenLeaderboard,
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'gamification' | 'history' | 'certificates'>('overview');
+  const [tierFilter, setTierFilter] = useState<'all' | 'bronze' | 'silver' | 'gold' | 'diamond'>('all');
   const [role, setRole] = useState<DonorProfileData['role']>(profileData.role);
   const [downloadNotice, setDownloadNotice] = useState<string | null>(null);
 
@@ -267,14 +409,24 @@ export const DonorProfileModal: React.FC<DonorProfileModalProps> = ({
 
           {/* Gamified Tier Progress Bar */}
           <div className="mt-4 pt-3 border-t border-white/15">
-            <div className="flex items-center justify-between text-xs text-white/90 mb-1">
+            <div className="flex flex-wrap items-center justify-between text-xs text-white/90 mb-1 gap-2">
               <span className="flex items-center gap-1 font-semibold">
                 <span className="material-symbols-outlined text-amber-300 text-sm">stars</span>
                 <span>Current Tier: <strong>Gold Sovereign Annadata</strong></span>
               </span>
-              <span className="font-mono text-[11px] text-emerald-200">
-                {profileData.points} / {nextTierPoints} Pts to Diamond Tier ({progressPercent}%)
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[11px] text-emerald-200">
+                  {profileData.points} / {nextTierPoints} Pts to Diamond Tier ({progressPercent}%)
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('gamification')}
+                  className="px-2 py-0.5 rounded-full bg-white/20 hover:bg-white/30 text-[10px] font-bold text-white transition-all cursor-pointer border border-white/30 flex items-center gap-1 shadow-2xs active:scale-95"
+                >
+                  <span className="material-symbols-outlined text-xs text-amber-300">workspace_premium</span>
+                  <span>View Tier Criteria Breakdown</span>
+                </button>
+              </div>
             </div>
             <div className="w-full bg-black/40 h-2.5 rounded-full overflow-hidden p-0.5 border border-white/20">
               <div
@@ -310,7 +462,7 @@ export const DonorProfileModal: React.FC<DonorProfileModalProps> = ({
             }`}
           >
             <span className="material-symbols-outlined text-base">military_tech</span>
-            <span>Gamified Badges &amp; Karma</span>
+            <span>Tier Criteria &amp; Badges</span>
           </button>
 
           <button
@@ -527,9 +679,267 @@ export const DonorProfileModal: React.FC<DonorProfileModalProps> = ({
             </div>
           )}
 
-          {/* TAB 2: GAMIFICATION, BADGES & KARMA ENGINE */}
+          {/* TAB 2: GAMIFICATION, TIER CRITERIA BREAKDOWN & BADGES */}
           {activeTab === 'gamification' && (
             <div className="space-y-6">
+              {/* SECTION: VISUAL BREAKDOWN OF TIER CRITERIA */}
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#006948]/30 shadow-md space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#bccac0]/25">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="p-2 rounded-xl bg-[#006948] text-white flex items-center justify-center shadow-xs">
+                        <span className="material-symbols-outlined text-xl">workspace_premium</span>
+                      </span>
+                      <div>
+                        <h3 className="font-headline font-bold text-base text-[#131b2e]">
+                          Tiered Badge System Criteria Breakdown
+                        </h3>
+                        <p className="text-xs text-[#3d4a42]">
+                          Detailed qualification rules, minimum thresholds, and statutory privileges for each civic tier.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <span className="px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-950 font-mono font-bold text-xs flex items-center gap-1.5 self-start sm:self-auto">
+                    <span className="material-symbols-outlined text-sm text-amber-600">stars</span>
+                    <span>Your Tier: <strong>Gold (Level 4)</strong></span>
+                  </span>
+                </div>
+
+                {/* Next Milestone Readiness Gauge (Gold -> Diamond) */}
+                <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-950 to-slate-900 text-white border border-cyan-400/40 shadow-inner space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">💎</span>
+                      <div>
+                        <div className="font-headline font-bold text-xs text-cyan-300 uppercase tracking-wider">
+                          Next Milestone Target: Diamond Sovereign Tier
+                        </div>
+                        <div className="text-[11px] text-white/80">
+                          Need <strong>1,150 Pts</strong> and <strong>520 kg</strong> to unlock Sovereign MCA CSR Accreditation.
+                        </div>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 font-mono font-bold text-xs border border-cyan-400/30">
+                      81% Overall Progress
+                    </span>
+                  </div>
+
+                  {/* 4 Multi-Metric Progress Bars */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 font-mono text-xs">
+                    <div className="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                      <div className="flex justify-between text-[10px] text-cyan-200 mb-1">
+                        <span>Points</span>
+                        <span>{profileData.points} / 6,000</span>
+                      </div>
+                      <div className="w-full bg-black/50 h-2 rounded-full overflow-hidden">
+                        <div
+                          className="bg-cyan-400 h-full rounded-full transition-all duration-700"
+                          style={{ width: `${Math.min(100, (profileData.points / 6000) * 100)}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-[9px] text-white/70 block mt-1">1,150 pts left</span>
+                    </div>
+
+                    <div className="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                      <div className="flex justify-between text-[10px] text-cyan-200 mb-1">
+                        <span>Food Mass</span>
+                        <span>{profileData.totalKg} / 2,000 kg</span>
+                      </div>
+                      <div className="w-full bg-black/50 h-2 rounded-full overflow-hidden">
+                        <div
+                          className="bg-emerald-400 h-full rounded-full transition-all duration-700"
+                          style={{ width: `${Math.min(100, (profileData.totalKg / 2000) * 100)}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-[9px] text-white/70 block mt-1">{Math.max(0, 2000 - profileData.totalKg)} kg left</span>
+                    </div>
+
+                    <div className="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                      <div className="flex justify-between text-[10px] text-cyan-200 mb-1">
+                        <span>Hot Meals</span>
+                        <span>{profileData.totalMeals} / 6,000</span>
+                      </div>
+                      <div className="w-full bg-black/50 h-2 rounded-full overflow-hidden">
+                        <div
+                          className="bg-amber-400 h-full rounded-full transition-all duration-700"
+                          style={{ width: `${Math.min(100, (profileData.totalMeals / 6000) * 100)}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-[9px] text-white/70 block mt-1">1,560 meals left</span>
+                    </div>
+
+                    <div className="bg-white/10 p-2.5 rounded-lg border border-white/10">
+                      <div className="flex justify-between text-[10px] text-cyan-200 mb-1">
+                        <span>Active Streak</span>
+                        <span>{profileData.streakDays} / 25 Days</span>
+                      </div>
+                      <div className="w-full bg-black/50 h-2 rounded-full overflow-hidden">
+                        <div
+                          className="bg-orange-400 h-full rounded-full transition-all duration-700"
+                          style={{ width: `${Math.min(100, (profileData.streakDays / 25) * 100)}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-[9px] text-white/70 block mt-1">11 days left</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tier Filter Tabs */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-bold">
+                  <span className="text-[11px] text-[#3d4a42] uppercase mr-1">Inspect Tier:</span>
+                  {[
+                    { id: 'all', label: 'All Tiers (4)' },
+                    { id: 'bronze', label: '🥉 Bronze Guardian' },
+                    { id: 'silver', label: '🥈 Silver Samaritan' },
+                    { id: 'gold', label: '🥇 Gold Sovereign (You)' },
+                    { id: 'diamond', label: '💎 Diamond Sovereign (Next)' },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setTierFilter(tab.id as any)}
+                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                        tierFilter === tab.id
+                          ? 'bg-[#006948] text-white shadow-xs'
+                          : 'bg-[#faf8ff] text-[#3d4a42] border border-[#bccac0]/30 hover:bg-[#eaedff]'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Visual Tier Cards Breakdown Grid */}
+                <div className="grid grid-cols-1 gap-4">
+                  {TIER_SYSTEM_CRITERIA.filter((t) => tierFilter === 'all' || tierFilter === t.id).map((tier) => {
+                    const isGold = tier.id === 'gold';
+                    const isDiamond = tier.id === 'diamond';
+
+                    return (
+                      <div
+                        key={tier.id}
+                        className={`p-4 sm:p-5 rounded-2xl border transition-all ${
+                          isGold
+                            ? 'bg-amber-50/50 border-2 border-amber-400 ring-4 ring-amber-400/20 shadow-md'
+                            : isDiamond
+                            ? 'bg-cyan-50/40 border-2 border-cyan-300 shadow-xs'
+                            : 'bg-[#faf8ff] border-[#bccac0]/30 shadow-2xs'
+                        }`}
+                      >
+                        {/* Tier Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#bccac0]/25">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${tier.gradient} text-white flex items-center justify-center shadow-md shrink-0`}
+                            >
+                              <span className="material-symbols-outlined text-2xl">{tier.icon}</span>
+                            </div>
+                            <div>
+                              <div className="flex flex-wrap items-center gap-2">
+                                <h4 className="font-headline font-bold text-sm sm:text-base text-[#131b2e]">
+                                  {tier.name}
+                                </h4>
+                                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#131b2e] text-white">
+                                  Tier Level {tier.tierLevel}
+                                </span>
+                              </div>
+                              <p className="text-xs text-[#3d4a42] mt-0.5">{tier.description}</p>
+                            </div>
+                          </div>
+
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold border ${tier.statusColor} self-start sm:self-auto`}>
+                            {tier.statusText}
+                          </span>
+                        </div>
+
+                        {/* Exact Criteria Breakdown Grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 py-3 border-b border-[#bccac0]/20 font-mono text-center">
+                          <div className="bg-white p-2.5 rounded-xl border border-[#bccac0]/25 shadow-2xs">
+                            <span className="text-[10px] text-[#3d4a42] uppercase font-sans font-bold block">
+                              Impact Points
+                            </span>
+                            <span className="text-xs font-black text-[#006948]">
+                              {tier.minPoints.toLocaleString()} - {typeof tier.maxPoints === 'number' ? tier.maxPoints.toLocaleString() : tier.maxPoints} Pts
+                            </span>
+                            <span className="text-[9px] text-[#3d4a42] block mt-0.5">
+                              {profileData.points >= tier.minPoints ? '✓ Met (4,850)' : `Need ${tier.minPoints - profileData.points}`}
+                            </span>
+                          </div>
+
+                          <div className="bg-white p-2.5 rounded-xl border border-[#bccac0]/25 shadow-2xs">
+                            <span className="text-[10px] text-[#3d4a42] uppercase font-sans font-bold block">
+                              Food Rescued
+                            </span>
+                            <span className="text-xs font-black text-amber-800">
+                              {tier.minKg.toLocaleString()} kg min
+                            </span>
+                            <span className="text-[9px] text-[#3d4a42] block mt-0.5">
+                              {profileData.totalKg >= tier.minKg ? `✓ Met (${profileData.totalKg.toLocaleString()} kg)` : `Need ${(tier.minKg - profileData.totalKg).toLocaleString()} kg`}
+                            </span>
+                          </div>
+
+                          <div className="bg-white p-2.5 rounded-xl border border-[#bccac0]/25 shadow-2xs">
+                            <span className="text-[10px] text-[#3d4a42] uppercase font-sans font-bold block">
+                              Meals Delivered
+                            </span>
+                            <span className="text-xs font-black text-[#131b2e]">
+                              {tier.minMeals.toLocaleString()}+ Meals
+                            </span>
+                            <span className="text-[9px] text-[#3d4a42] block mt-0.5">
+                              {profileData.totalMeals >= tier.minMeals ? '✓ Met (4,440)' : `Need ${tier.minMeals - profileData.totalMeals}`}
+                            </span>
+                          </div>
+
+                          <div className="bg-white p-2.5 rounded-xl border border-[#bccac0]/25 shadow-2xs">
+                            <span className="text-[10px] text-[#3d4a42] uppercase font-sans font-bold block">
+                              Active Streak
+                            </span>
+                            <span className="text-xs font-black text-orange-600">
+                              🔥 {tier.minStreak} Days
+                            </span>
+                            <span className="text-[9px] text-[#3d4a42] block mt-0.5">
+                              {profileData.streakDays >= tier.minStreak ? '✓ Met (14d)' : `Need ${tier.minStreak - profileData.streakDays}d`}
+                            </span>
+                          </div>
+
+                          <div className="col-span-2 sm:col-span-1 bg-white p-2.5 rounded-xl border border-[#bccac0]/25 shadow-2xs">
+                            <span className="text-[10px] text-[#3d4a42] uppercase font-sans font-bold block">
+                              HACCP &amp; SLA
+                            </span>
+                            <span className="text-xs font-black text-cyan-800">
+                              {tier.haccpRate}% (&lt;{tier.targetWindowMins}m)
+                            </span>
+                            <span className="text-[9px] text-[#3d4a42] block mt-0.5">
+                              ✓ 99.6% Verified
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Unlocked Perks & Privileges */}
+                        <div className="pt-3">
+                          <span className="text-[11px] font-bold text-[#131b2e] uppercase tracking-wider block mb-1.5 flex items-center gap-1">
+                            <span className="material-symbols-outlined text-sm text-[#006948]">verified</span>
+                            <span>Privileges &amp; Statutory Perks Unlocked:</span>
+                          </span>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#3d4a42]">
+                            {tier.unlockedPerks.map((perk, pIdx) => (
+                              <div key={pIdx} className="flex items-start gap-1.5">
+                                <span className="material-symbols-outlined text-sm text-[#006948] shrink-0 mt-0.5">
+                                  check_circle
+                                </span>
+                                <span>{perk}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* How points work card */}
               <div className="bg-[#e2f7ec] p-4 rounded-xl border border-[#006948]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
@@ -631,6 +1041,24 @@ export const DonorProfileModal: React.FC<DonorProfileModalProps> = ({
                       {profileData.totalMeals} Meals · {profileData.points} Pts
                     </div>
                   </div>
+                </div>
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      if (onOpenLeaderboard) {
+                        onOpenLeaderboard();
+                      } else {
+                        window.location.hash = 'leaderboard';
+                      }
+                    }}
+                    className="px-3.5 py-1.5 rounded-lg bg-[#006948] hover:bg-[#005238] text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+                  >
+                    <span>View Full Community Leaderboard</span>
+                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                  </button>
                 </div>
               </div>
             </div>

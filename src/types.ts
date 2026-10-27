@@ -10,7 +10,8 @@ export type DonorReceiverSubTab =
   | 'donate'
   | 'receive'
   | 'request-aid'
-  | 'rewards';
+  | 'rewards'
+  | 'leaderboard';
 
 export interface FoodCategory {
   id: string;

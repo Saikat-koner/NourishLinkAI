@@ -176,10 +176,17 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
               </button>
               <button
-                onClick={() => onSelectPortal('donor-receiver', 'receive')}
-                className="py-3 px-4 rounded-xl bg-[#eaedff] text-[#006948] font-headline font-bold text-xs hover:bg-[#e2e7ff] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                onClick={() => onSelectPortal('donor-receiver', 'leaderboard')}
+                className="py-3 px-3.5 rounded-xl bg-amber-100 text-amber-950 font-headline font-bold text-xs hover:bg-amber-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
               >
-                <span>Shelter Intake Hub</span>
+                <span className="material-symbols-outlined text-sm">leaderboard</span>
+                <span>Leaderboard</span>
+              </button>
+              <button
+                onClick={() => onSelectPortal('donor-receiver', 'receive')}
+                className="py-3 px-3.5 rounded-xl bg-[#eaedff] text-[#006948] font-headline font-bold text-xs hover:bg-[#e2e7ff] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <span>Shelters</span>
               </button>
             </div>
           </div>
